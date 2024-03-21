@@ -1,4 +1,4 @@
-import VerticalLayout from './VerticalLayout.js'
+import VerticalLayout from "./VerticalLayout.js";
 
 export default () => {
 
@@ -70,5 +70,5 @@ export default () => {
         </div>
       </div>
     </div>
-  `)
+  `);
 }
