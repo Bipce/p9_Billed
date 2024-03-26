@@ -17,19 +17,31 @@ export default class NewBill {
     new Logout({ document, localStorage, onNavigate });
   }
 
+  /**
+   * Hide error message if state is true and show error message if state is false.
+   * @param {boolean} state
+   */
+  hideErrMsg = (state) => {
+    const errMsg = this.document.querySelector("#err-msg");
+
+    errMsg.classList.add(state ? "err-msg--hidden" : "err-msg");
+    errMsg.classList.remove(state ? "err-msg" : "err-msg--hidden");
+  };
 
   handleChangeFile = e => {
     e.preventDefault();
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0];
-    const filePath = e.target.value.split(/\\/g);
-    const fileName = filePath[filePath.length - 1];
-    
-    // Fix [Bug Hunt] Issue 3
+    let filePath = e.target.value.split(/\\/g);
+    let fileName = filePath[filePath.length - 1];
+
     if (file.type === "image/png" || file.type === "image/jpg" || file.type === "image/jpeg") {
+      // Fix [Bug Hunt] Issue 3
       const formData = new FormData();
       const email = JSON.parse(localStorage.getItem("user")).email;
       formData.append("file", file);
       formData.append("email", email);
+      // Add function for error message
+      this.hideErrMsg(true);
 
       this.store
         .bills()
@@ -44,8 +56,10 @@ export default class NewBill {
           this.fileUrl = fileUrl;
           this.fileName = fileName;
         }).catch(error => console.error(error));
+
     } else {
-      alert(`Veuillez sélectionner un fichier "jpeg", "jpg" ou "png.`);
+      this.hideErrMsg(false);
+      e.target.value = "";
     }
   };
   handleSubmit = e => {
