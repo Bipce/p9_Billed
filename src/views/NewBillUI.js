@@ -10,7 +10,7 @@ export default () => {
           <div class='content-title'> Envoyer une note de frais </div>
         </div>
         <div class="form-newbill-container content-inner">
-          <form data-testid="form-new-bill">
+          <form id="form-new-bill" data-testid="form-new-bill">
             <div class="row">
                 <div class="col-md-6">
                   <div class="col-half">
