@@ -5,12 +5,12 @@
 import { screen, waitFor } from "@testing-library/dom";
 import BillsUI from "../views/BillsUI.js";
 import { bills } from "../fixtures/bills.js";
-import { ROUTES_PATH } from "../constants/routes.js";
+import { ROUTES, ROUTES_PATH } from "../constants/routes.js";
 import { localStorageMock } from "../__mocks__/localStorage.js";
 
 import router from "../app/Router.js";
-// import Bills from "../containers/Bills.js";
-// import store from "../app/Store.js";
+import Bills from "../containers/Bills.js";
+import userEvent from "@testing-library/user-event";
 
 describe("Given I am connected as an employee", () => {
   describe("When I am on Bills Page", () => {
@@ -37,28 +37,30 @@ describe("Given I am connected as an employee", () => {
       expect(dates).toEqual(datesSorted);
     });
 
-    // test("Then it should return an array of the bills", () => {
-    //   Object.defineProperty(window, "localStorage", { value: localStorageMock });
-    //   window.localStorage.setItem("user", JSON.stringify({
-    //     type: "Employee",
-    //   }));
-    //   const root = document.createElement("div");
-    //   root.setAttribute("id", "root");
-    //   document.body.append(root);
-    //   router();
-    //
-    //   const pathname = ROUTES_PATH.Bills;
-    //   window.onNavigate(pathname);
-    //
-    //   const bills = new Bills({ document, onNavigate, store, localStorage });
-    //   bills.getBills().then(data => {
-    //     root.innerHTML = BillsUI({ data });
-    //     new Bills({ document, onNavigate, store, localStorage });
-    //   }).catch(error => {
-    //     root.innerHTML = ROUTES({ pathname, error });
-    //   });
-    //   console.log(bills.getBills());
-    //   // expect(Bills.).toEqual(bills);
-    // });
+    describe("When I click on new bill button", () => {
+      test("Then it should open the new bill page", () => {
+        Object.defineProperty(window, "localStorage", { value: localStorageMock });
+        window.localStorage.setItem("user", JSON.stringify({
+          type: "Employee",
+        }));
+        document.body.innerHTML = BillsUI({ data: bills });
+        const onNavigate = (pathname) => {
+          document.body.innerHTML = ROUTES({ pathname });
+        };
+        const store = null;
+        const bill = new Bills({
+          document, onNavigate, store, localStorage: window.localStorage,
+        });
+
+        const handleClickNewBillBtn = jest.fn(bill.handleClickNewBill);
+        const newBillBtn = screen.getByTestId("btn-new-bill");
+        newBillBtn.addEventListener("click", handleClickNewBillBtn);
+        userEvent.click(newBillBtn);
+        expect(handleClickNewBillBtn).toHaveBeenCalled();
+
+        const form = document.querySelector(".content-title");
+        expect(form.textContent.trim()).toBe("Envoyer une note de frais");
+      });
+    });
   });
 });
