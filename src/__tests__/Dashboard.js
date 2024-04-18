@@ -228,7 +228,7 @@ describe("Given I am connected as Admin and I am on Dashboard page and I clicked
       const dashboard = new Dashboard({
         document, onNavigate, store, bills, localStorage: window.localStorage,
       });
-      
+
       const handleClickIconEye = jest.fn(dashboard.handleClickIconEye);
       const eye = screen.getByTestId("icon-eye-d");
       eye.addEventListener("click", handleClickIconEye);
