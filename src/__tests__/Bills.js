@@ -30,14 +30,13 @@ describe("Given I am connected as an employee", () => {
     return new Bills({ document, onNavigate, store, localStorage });
   };
 
-  describe("When I am on Bills Page", () => {
+  describe("When I navigate to Bills Page", () => {
     let initializeBills;
     let handleClickNewBill;
     beforeEach(() => {
       // Create test environment
       initializeBills = initialisationBills();
       handleClickNewBill = jest.fn(initializeBills.handleClickNewBill);
-
     });
 
     test("Then bill icon in vertical layout should be highlighted", async () => {
@@ -54,7 +53,6 @@ describe("Given I am connected as an employee", () => {
     });
 
     test("Then bills should be ordered from earliest to latest", () => {
-      // test à observer attentivement pour les besoins du projet
       document.body.innerHTML = BillsUI({ data: bills });
       const dates = screen.getAllByText(/^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$/i).map(a => a.innerHTML);
       const antiChrono = (a, b) => ((a < b) ? 1 : -1);
