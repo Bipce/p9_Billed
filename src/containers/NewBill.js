@@ -34,8 +34,8 @@ export default class NewBill {
     let filePath = e.target.value.split(/\\/g);
     let fileName = filePath[filePath.length - 1];
 
+    // Fix [Bug Hunt] Issue 3
     if (file.type === "image/png" || file.type === "image/jpg" || file.type === "image/jpeg") {
-      // Fix [Bug Hunt] Issue 3
       const formData = new FormData();
       const email = JSON.parse(localStorage.getItem("user")).email;
       formData.append("file", file);

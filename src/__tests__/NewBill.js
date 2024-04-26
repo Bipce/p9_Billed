@@ -70,6 +70,36 @@ describe("Given I am connected as an employee", () => {
         expect(handleSubmit).toHaveBeenCalled();
       });
     });
+
+    describe("When I select a file with an incorrect extension", () => {
+      test("Then error message is displayed", async () => {
+        document.body.innerHTML = NewBillUI();
+        const newBill = new NewBill({
+          document, onNavigate, store: store, localStorage: window.localStorage,
+        });
+        // selection du fichier afin de vérifier son format
+        const handleChangeFile = jest.fn((e) => newBill.handleChangeFile(e));
+        const input = screen.getByTestId("file");
+        input.addEventListener("change", handleChangeFile);
+
+        //fichier au format txt, = mauvais format de fichier afin de tester l'indication d'erreur
+        fireEvent.change(input, {
+          target: {
+            files: [new File(["image.txt"], "image.txt", {
+              type: "image/txt",
+            })],
+          },
+        });
+
+        expect(handleChangeFile).toHaveBeenCalled();
+
+        // Check if error message is visible
+        await waitFor(() => screen.getByTestId("err-msg"));
+        const errMsg = screen.getByTestId("err-msg");
+        let computedStyle = getComputedStyle(errMsg);
+        expect(computedStyle.display).toBe("block");
+      });
+    });
   });
 });
 
