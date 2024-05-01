@@ -52,7 +52,6 @@ describe("Given I am connected as an employee", () => {
             })],
           },
         });
-
         expect(handleChangeFile).toHaveBeenCalled();
         expect(input["files"][0].name).toBe("image_test_unitaire.jpg");
       });
@@ -77,12 +76,12 @@ describe("Given I am connected as an employee", () => {
         const newBill = new NewBill({
           document, onNavigate, store: store, localStorage: window.localStorage,
         });
-        // selection du fichier afin de vérifier son format
+        // Select file so we can check its format
         const handleChangeFile = jest.fn((e) => newBill.handleChangeFile(e));
         const input = screen.getByTestId("file");
         input.addEventListener("change", handleChangeFile);
 
-        //fichier au format txt, = mauvais format de fichier afin de tester l'indication d'erreur
+        // .txt file = wrong format file, so we can test if error message is display
         fireEvent.change(input, {
           target: {
             files: [new File(["image.txt"], "image.txt", {
@@ -90,9 +89,7 @@ describe("Given I am connected as an employee", () => {
             })],
           },
         });
-
         expect(handleChangeFile).toHaveBeenCalled();
-
         // Check if error message is visible
         await waitFor(() => screen.getByTestId("err-msg"));
         const errMsg = screen.getByTestId("err-msg");
@@ -181,7 +178,6 @@ describe("When I navigate to the page newBill", () => {
         const postSpy = jest.spyOn(console, "error");
         await errorTest("404");
         expect(postSpy).toBeCalledWith(new Error("404"));
-
       });
 
       test("add bills from an API and fails with 500 message error", async () => {
